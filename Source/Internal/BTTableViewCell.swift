@@ -26,8 +26,11 @@ import UIKit
 class BTTableViewCell: UITableViewCell {
     let checkmarkIconWidth: CGFloat = 50
     let horizontalMargin: CGFloat = 20
+    let colorMarkerWidth: CGFloat = 20
+    let colorMarkerMargin: CGFloat = 10
     
     var checkmarkIcon: UIImageView!
+    var colorMarker: UIView!
     var cellContentFrame: CGRect!
     var configuration: BTConfiguration!
     
@@ -43,22 +46,31 @@ class BTTableViewCell: UITableViewCell {
         self.textLabel!.textColor = self.configuration.cellTextLabelColor
         self.textLabel!.font = self.configuration.cellTextLabelFont
         self.textLabel!.textAlignment = self.configuration.cellTextLabelAlignment
-        if self.textLabel!.textAlignment == .center {
-            self.textLabel!.frame = CGRect(x: 0, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
-        } else if self.textLabel!.textAlignment == .left {
-            self.textLabel!.frame = CGRect(x: horizontalMargin, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
-        } else {
-            self.textLabel!.frame = CGRect(x: -horizontalMargin, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
-        }
         
-        // Checkmark icon
-        if self.textLabel!.textAlignment == .center {
+        let markerHeight = cellContentFrame.height - colorMarkerMargin * 2
+        
+        switch self.textLabel!.textAlignment {
+        case .center:
+            self.colorMarker = UIView(frame: CGRect(x: horizontalMargin, y: colorMarkerMargin, width: colorMarkerWidth, height: markerHeight))
+            self.textLabel!.frame = CGRect(x: 0, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
             self.checkmarkIcon = UIImageView(frame: CGRect(x: cellContentFrame.width - checkmarkIconWidth, y: (cellContentFrame.height - 30)/2, width: 30, height: 30))
-        } else if self.textLabel!.textAlignment == .left {
+        case .left:
+            var margin = horizontalMargin
+            self.colorMarker = UIView(frame: CGRect(x: margin, y: colorMarkerMargin, width: colorMarkerWidth, height: markerHeight))
+            margin += colorMarkerWidth + colorMarkerMargin
+            self.textLabel!.frame = CGRect(x: margin, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
             self.checkmarkIcon = UIImageView(frame: CGRect(x: cellContentFrame.width - checkmarkIconWidth, y: (cellContentFrame.height - 30)/2, width: 30, height: 30))
-        } else {
+        default:
+            self.colorMarker = UIView(frame: CGRect(x: horizontalMargin, y: colorMarkerMargin, width: colorMarkerWidth, height: markerHeight))
+            self.textLabel!.frame = CGRect(x: -horizontalMargin, y: 0, width: cellContentFrame.width, height: cellContentFrame.height)
             self.checkmarkIcon = UIImageView(frame: CGRect(x: horizontalMargin, y: (cellContentFrame.height - 30)/2, width: 30, height: 30))
         }
+        
+        // Color marker
+        self.colorMarker.backgroundColor = UIColor.clear
+        self.contentView.addSubview(self.colorMarker)
+        
+        // Checkmark icon
         self.checkmarkIcon.isHidden = true
         self.checkmarkIcon.image = self.configuration.checkMarkImage
         self.checkmarkIcon.contentMode = UIViewContentMode.scaleAspectFill
