@@ -38,7 +38,7 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     init(frame: CGRect, items: [BTTableCellViewModel], title: String, configuration: BTConfiguration) {
-        super.init(frame: frame, style: UITableViewStyle.plain)
+        super.init(frame: frame, style: UITableView.Style.plain)
         
         self.items = items
         self.selectedIndexPath = items.map { $0.title }.index(of: title)
@@ -48,9 +48,9 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
         self.delegate = self
         self.dataSource = self
         self.backgroundColor = UIColor.clear
-        self.separatorStyle = UITableViewCellSeparatorStyle.none
+        self.separatorStyle = UITableViewCell.SeparatorStyle.none
         //        self.separatorEffect = UIBlurEffect(style: .Light)
-        self.autoresizingMask = UIViewAutoresizing.flexibleWidth
+        self.autoresizingMask = UIView.AutoresizingMask.flexibleWidth
         self.tableFooterView = UIView(frame: CGRect.zero)
     }
     
@@ -75,7 +75,7 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = BTTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "Cell", configuration: self.configuration)
+        let cell = BTTableViewCell(style: UITableViewCell.CellStyle.default, reuseIdentifier: "Cell", configuration: self.configuration)
         let item = self.items[(indexPath as NSIndexPath).row]
         cell.textLabel?.text = item.title
         cell.colorMarker?.backgroundColor = item.color
